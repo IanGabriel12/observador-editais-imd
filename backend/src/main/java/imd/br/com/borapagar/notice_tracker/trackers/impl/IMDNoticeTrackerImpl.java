@@ -8,8 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import imd.br.com.borapagar.notice_tracker.entities.Notice;
-import imd.br.com.borapagar.notice_tracker.entities.NoticeRepository;
 import imd.br.com.borapagar.notice_tracker.helpers.SSLHelper;
+import imd.br.com.borapagar.notice_tracker.repositories.NoticeRepository;
 import imd.br.com.borapagar.notice_tracker.trackers.INoticeTracker;
 
 import org.jsoup.nodes.Document;

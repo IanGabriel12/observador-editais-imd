@@ -6,7 +6,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import imd.br.com.borapagar.notice_tracker.entities.Notice;
-import imd.br.com.borapagar.notice_tracker.entities.NoticeRepository;
+import imd.br.com.borapagar.notice_tracker.repositories.NoticeRepository;
 import imd.br.com.borapagar.notice_tracker.trackers.INoticeTracker;
 import imd.br.com.borapagar.notice_tracker.trackers.impl.IMDNoticeTrackerImpl;
 
