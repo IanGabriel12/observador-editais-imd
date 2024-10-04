@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    </head>
+    <body>
+        <ul class="notice-list">
+            <li th:each="notice : ${notices}">
+                <h5 th:utext="${notice.title}"></h5>
+                <a th:href="${notice.url}">Link do edital</a>
+            </li>
+        </ul>
+        <hr>
+        <a th:href="${unsubscribeUrl}">Se desinscreva aqui</a>
+    </body>
+</html>
