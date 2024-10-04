@@ -33,15 +33,29 @@ public class IMDNoticeTrackerImpl implements INoticeTracker {
         return newNotices;
     }
 
+    /**
+     * Dado uma lista de editais, filtra apenas aqueles que não estão no banco de dados.
+     * @param notices - Lista original de editais
+     * @return Lista contendo editais novos
+     */
     private List<Notice> filterNewNotices(List<Notice> notices) {
         return notices.stream().filter((notice) -> !isNoticeAtDatabase(notice)).toList();
     }
 
+    /**
+     * Verifica se o edital já existe no banco de dados
+     * @param notice - Edital
+     * @return Um booleano
+     */
     private Boolean isNoticeAtDatabase(Notice notice) {
         return noticeRepository.findBySourceNameAndIdAtSource(SOURCE_NAME, notice.getIdAtSource()).isPresent();
     } 
     
 
+    /**
+     * Recupera todos os editais presentes na seção "Em andamento" da página de editais do IMD.
+     * @return Lista de editais
+     */
     private List<Notice> fetchAllNotices() {
         ArrayList<Notice> notices = new ArrayList<>();
         try {

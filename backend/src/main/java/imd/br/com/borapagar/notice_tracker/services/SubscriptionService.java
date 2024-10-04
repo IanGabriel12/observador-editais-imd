@@ -17,6 +17,11 @@ public class SubscriptionService {
     @Autowired
     private SubscriptionRepository subscriptionRepository;
 
+    /**
+     * Insere uma nova entidade representando uma inscrição no banco de dados.
+     * Este método valida se o email é único.
+     * @param createSubscriptionBody - Dados do corpo da requisição. Contém o email
+     */
     public void insertNewSubscription(CreateSubscriptionBody createSubscriptionBody) {
         String email = createSubscriptionBody.email();
         if(isEmailSubscribed(email)) {
@@ -31,10 +36,19 @@ public class SubscriptionService {
         subscriptionRepository.save(subscription);
     }
 
+    /**
+     * Checa se o email está presente no banco de dados
+     * @param email - Email a ser verificado
+     * @return booleano indicando se o email existe no banco ou não
+     */
     private Boolean isEmailSubscribed(String email) {
         return subscriptionRepository.findByEmail(email).isPresent();
     }
 
+    /**
+     * Dado um token, remove a inscrição relacionada a este token.
+     * @param removeSubscriptionBody - Dados do corpo da requisição. Contém o token
+     */
     public void removeSubscription(RemoveSubscriptionBody removeSubscriptionBody) {
         String removeToken = removeSubscriptionBody.removeToken();
         Subscription subscription = subscriptionRepository

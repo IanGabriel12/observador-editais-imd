@@ -28,6 +28,10 @@ public class GetNewNoticesCron {
         noticeTrackers.add(imdNoticeTracker);
     }
 
+    /**
+     * Ação agendada que realiza a procura por novos editais e notifica os usuários
+     * caso tenha algum edital novo.
+     */
     @Scheduled(fixedDelay = 5000)
     public void getNewNoticesCron() {
         if(isCronActive) {

@@ -22,12 +22,26 @@ public class SubscriptionController {
     @Autowired
     private SubscriptionService subscriptionService;
 
+    /**
+     * Inscreve um email para receber os novos editais aparecerem
+     * @param subscriptionDTO - Corpo da requisição. Contém o email
+     * @return Resposta indicando o resultado da inscrição
+     */
     @PostMapping
     public ResponseEntity<String> subscribeEmail(@RequestBody @Valid CreateSubscriptionBody subscriptionDTO) {
         subscriptionService.insertNewSubscription(subscriptionDTO);
         return ResponseEntity.ok().body("Email registrado com sucesso");
     }
 
+    /**
+     * Faz com que o email inscrito pare de receber novas mensagens.
+     * 
+     * <p> Para previnir que uma pessoa que não tenha acesso ao email realize essa ação, 
+     * em vez do email, este método recebe um token. Este token foi gerado para o usuário no momento da inscrição. 
+     * O token está presente em todas as mensagens recebidas.
+     * @param removeSubscriptionBody
+     * @return
+     */
     @DeleteMapping
     public ResponseEntity<String> removeSubscription(@RequestBody @Valid RemoveSubscriptionBody removeSubscriptionBody) {
         subscriptionService.removeSubscription(removeSubscriptionBody);
