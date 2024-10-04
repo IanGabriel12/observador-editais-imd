@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import imd.br.com.borapagar.notice_tracker.entities.Notice;
+import imd.br.com.borapagar.notice_tracker.exception.ApiException;
 import imd.br.com.borapagar.notice_tracker.helpers.SSLHelper;
 import imd.br.com.borapagar.notice_tracker.repositories.NoticeRepository;
 import imd.br.com.borapagar.notice_tracker.trackers.INoticeTracker;
@@ -63,9 +64,9 @@ public class IMDNoticeTrackerImpl implements INoticeTracker {
                 notices.add(notice);
             }
         } catch(IOException ex) {
-            throw new RuntimeException(ex.getMessage());
+            throw new ApiException(ex.getMessage());
         } catch (NumberFormatException ex) {
-            throw new RuntimeException(ex.getMessage());
+            throw new ApiException(ex.getMessage());
         }
         return notices;
     }

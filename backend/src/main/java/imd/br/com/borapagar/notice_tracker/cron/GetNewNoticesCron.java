@@ -38,7 +38,7 @@ public class GetNewNoticesCron {
             System.out.println(newNotices.size());
             noticeRepository.saveAll(newNotices);
         } else {
-            System.out.println("Cron está desativado. Se você não quer isso, mude o application.properties");
+            System.out.println("Cron is not active. If you dont want that, change application.properties");
         }
     }
 }

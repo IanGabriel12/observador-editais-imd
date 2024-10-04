@@ -13,6 +13,8 @@ import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.springframework.stereotype.Component;
 
+import imd.br.com.borapagar.notice_tracker.exception.ApiException;
+
 /**
  * Este componente valida os certificados SSL das URL's que queremos conectar.
  * Assim, a conexão utilizando o Jsoup será possível.
@@ -46,9 +48,9 @@ public class SSLHelper {
 
             return result;
         } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException("Failed to create a SSL socket factory", e);
+            throw new ApiException("Failed to create a SSL socket factory");
         } catch (KeyManagementException e) {
-            throw new RuntimeException("Failed to create a SSL socket factory", e);
+            throw new ApiException("Failed to create a SSL socket factory");
         }
     }
 }
