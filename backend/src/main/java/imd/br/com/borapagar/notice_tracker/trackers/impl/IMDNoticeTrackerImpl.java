@@ -23,7 +23,8 @@ public class IMDNoticeTrackerImpl implements INoticeTracker {
     @Autowired
     private NoticeRepository noticeRepository;
 
-    private final String SOURCE_URL = "https://www.metropoledigital.ufrn.br/portal/editais";
+    private final String SOURCE_URL = "https://www.metropoledigital.ufrn.br";
+    private final String NOTICES_URI = "portal/editais";
     private final String SOURCE_NAME = "IMD";
 
     @Override
@@ -59,7 +60,8 @@ public class IMDNoticeTrackerImpl implements INoticeTracker {
     private List<Notice> fetchAllNotices() {
         ArrayList<Notice> notices = new ArrayList<>();
         try {
-            Document noticeWebsite = SSLHelper.getConnection(SOURCE_URL).get();
+            String noticesUrl = String.format("%s/%s", SOURCE_URL, NOTICES_URI);
+            Document noticeWebsite = SSLHelper.getConnection(noticesUrl).get();
             Elements noticesElements = noticeWebsite.select(".box-editais-andamentos .card .card-body a");
             for(Element noticeElement : noticesElements) {
                 String noticeTitle = noticeElement.select("span").first().text();
@@ -78,6 +80,7 @@ public class IMDNoticeTrackerImpl implements INoticeTracker {
                 notices.add(notice);
             }
         } catch(IOException ex) {
+            ex.printStackTrace();
             throw new ApiException(ex.getMessage());
         } catch (NumberFormatException ex) {
             throw new ApiException(ex.getMessage());

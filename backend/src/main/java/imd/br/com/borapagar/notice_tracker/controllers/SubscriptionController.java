@@ -30,7 +30,7 @@ public class SubscriptionController {
     @PostMapping
     public ResponseEntity<String> subscribeEmail(@RequestBody @Valid CreateSubscriptionBody subscriptionDTO) {
         subscriptionService.insertNewSubscription(subscriptionDTO);
-        return ResponseEntity.ok().body("Email registrado com sucesso");
+        return ResponseEntity.ok().body("Email subscribed with success");
     }
 
     /**
@@ -45,7 +45,7 @@ public class SubscriptionController {
     @DeleteMapping
     public ResponseEntity<String> removeSubscription(@RequestBody @Valid RemoveSubscriptionBody removeSubscriptionBody) {
         subscriptionService.removeSubscription(removeSubscriptionBody);
-        return ResponseEntity.ok().body("Email removido com sucesso");
+        return ResponseEntity.ok().body("Email successifully unsubscribed");
     }
     
 }

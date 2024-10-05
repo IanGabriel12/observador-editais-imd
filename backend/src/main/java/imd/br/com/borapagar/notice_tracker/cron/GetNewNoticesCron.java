@@ -31,8 +31,11 @@ public class GetNewNoticesCron {
     @Value("${app.activate-cron}")
     private Boolean isCronActive;
 
-    @Value("${app.unsubscribe-url}")
-    private String unsubscribeUrl;
+    @Value("${app.unsubscribe-uri}")
+    private String UNSUBSCRIBE_URI;
+
+    @Value("${app.frontend-url}")
+    private String FRONTEND_URL;
 
     public GetNewNoticesCron(
         NoticeRepository noticeRepository,
@@ -57,6 +60,7 @@ public class GetNewNoticesCron {
     @Scheduled(fixedDelay = 5000)
     public void getNewNoticesCron() {
         if(isCronActive) {
+            System.out.println("Executing cron");
             ArrayList<Notice> newNotices = new ArrayList<>();
             for(INoticeTracker tracker : noticeTrackers) {
                 newNotices.addAll(tracker.getNewNotices());
@@ -100,6 +104,7 @@ public class GetNewNoticesCron {
      */
     private String generateEmailContent(List<Notice> newNotices, String removeToken) {
         Context context = new Context();
+        String unsubscribeUrl = String.format("%s/%s?token=%s", FRONTEND_URL, UNSUBSCRIBE_URI, removeToken);
         context.setVariable("notices", newNotices);
         context.setVariable("unsubscribeUrl", unsubscribeUrl);
         String processedText =  templateEngine.process("email-template", context);
