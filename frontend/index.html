@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./assets/css/index.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <title>Observador de editais do IMD</title>
+</head>
+<body>
+    <div class="container">
+        <form action="" class="inter">
+            <img src="./assets/images/imd-logo.png" alt="Logomarca do Instituto Metrópole digital">
+            <p>Receba notificações por e-mail quando novos editais forem publicados</p>
+            <input required type="email" placeholder="Seu email principal">
+            <button type="submit">Inscrever-se</button>
+            <p id="message"></p>
+        </form>
+    </div>
+</body>
+
+<script lang="js">
+const INTERNAL_SERVER_ERROR = 500;
+const CONFLICT = 409;
+function handleFormSubmit(event) {
+    event.preventDefault();
+    const email = document.querySelector('input').value;
+    activateButtonLoading();
+    resetMessage();
+    axios({
+        method: 'post',
+        url: 'http://localhost:8080/subscription',
+        data: {
+            email, 
+        }
+    })
+    .then(() => {
+        resetInput();
+        showSuccessMessage('Email inscrito com sucesso. <br/> Você agora receberá notificações de novos editais pela caixa de entrada.');
+    })
+    .catch((response) => {
+        if(response.status == CONFLICT) {
+            showSuccessMessage('Muito bem! Seu e-mail já está inscrito');
+        } else if (response.status == INTERNAL_SERVER_ERROR) {
+            showErrorMessage('Erro no servidor. Reporte ao desenvolvedor');
+        }
+    })
+    .finally(deactivateButtonLoading);
+}
+
+function resetMessage() {
+    document.querySelector('#message').innerHTML = '';
+}
+
+function resetInput() {
+    document.querySelector('input').value = '';
+}
+
+function showSuccessMessage(message) {
+    const messageElement = document.querySelector('#message')
+    messageElement.className = 'success';
+    messageElement.innerHTML = message;
+}
+
+function showErrorMessage(message) {
+    const messageElement = document.querySelector('#message')
+    messageElement.className = 'error';
+    messageElement.innerHTML = message;
+}
+
+function activateButtonLoading() {
+    const button = document.querySelector('button');
+    const loader = document.createElement('div');
+    loader.className = 'loader';
+    button.innerHTML = '';
+    button.appendChild(loader);
+    button.appendChild(document.createTextNode('Realizando inscrição'))
+    button.disabled = true;
+}
+
+function deactivateButtonLoading() {
+    const button = document.querySelector('button');
+    button.disabled = false;
+    button.innerHTML = '';
+    button.innerText = 'Inscrever-se';
+}
+document.querySelector('form').addEventListener('submit', handleFormSubmit)
+
+</script>
+</html>
