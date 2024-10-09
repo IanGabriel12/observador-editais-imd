@@ -19,4 +19,4 @@ EXPOSE 8080
 WORKDIR /app
 COPY . .
 RUN mvn clean package
-ENTRYPOINT ["java", "-jar", "target/notice-tracker-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=common,prod", "target/notice-tracker-0.0.1-SNAPSHOT.jar"]

@@ -34,3 +34,4 @@ build/
 
 notice_tracker.mv.db
 .envrc
+setup.sh
