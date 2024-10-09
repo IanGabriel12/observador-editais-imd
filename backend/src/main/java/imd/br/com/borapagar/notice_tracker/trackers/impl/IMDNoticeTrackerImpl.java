@@ -16,12 +16,16 @@ import imd.br.com.borapagar.notice_tracker.trackers.INoticeTracker;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Service
 public class IMDNoticeTrackerImpl implements INoticeTracker {
 
     @Autowired
     private NoticeRepository noticeRepository;
+
+    private static Logger logger = LoggerFactory.getLogger(IMDNoticeTrackerImpl.class);
 
     private final String SOURCE_URL = "https://www.metropoledigital.ufrn.br";
     private final String NOTICES_URI = "portal/editais";
@@ -80,7 +84,7 @@ public class IMDNoticeTrackerImpl implements INoticeTracker {
                 notices.add(notice);
             }
         } catch(IOException ex) {
-            ex.printStackTrace();
+            logger.atError().log("Error at fetching notices from IMD website");
             throw new ApiException(ex.getMessage());
         } catch (NumberFormatException ex) {
             throw new ApiException(ex.getMessage());

@@ -3,6 +3,8 @@ package imd.br.com.borapagar.notice_tracker.cron;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -27,6 +29,7 @@ public class GetNewNoticesCron {
     private SubscriptionRepository subscriptionRepository;
     private TemplateEngine templateEngine;
     private IEmailHelper emailHelper;
+    private static Logger logger = LoggerFactory.getLogger(GetNewNoticesCron.class);
 
     @Value("${app.activate-cron}")
     private Boolean isCronActive;
@@ -60,17 +63,19 @@ public class GetNewNoticesCron {
     @Scheduled(fixedDelay = 5000)
     public void getNewNoticesCron() {
         if(isCronActive) {
-            System.out.println("Executing cron");
             ArrayList<Notice> newNotices = new ArrayList<>();
             for(INoticeTracker tracker : noticeTrackers) {
                 newNotices.addAll(tracker.getNewNotices());
             }
             if(!newNotices.isEmpty()) {
+                logger.atInfo().log(String.format("Cron job found %d new notices. Notifying users...", newNotices.size()));
                 noticeRepository.saveAll(newNotices);
                 notifyAllUsers(newNotices); 
+            } else {
+                logger.atInfo().log("Cron did not find any new notices");
             }
         } else {
-            System.out.println("Cron is not active. If you dont want that, change application.properties");
+            logger.atWarn().log("Cron is not active. If this is not intended, change application.properties file");
         }
     }
 
@@ -90,7 +95,7 @@ public class GetNewNoticesCron {
                 emailHelper.sendEmail(noticesEmail);
 
             } catch (MessagingException e) {
-                System.out.println(e.getMessage());
+                logger.atError().log(e.getMessage());
             }
         }
     }
