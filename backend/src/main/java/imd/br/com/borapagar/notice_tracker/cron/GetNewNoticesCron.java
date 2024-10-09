@@ -40,6 +40,9 @@ public class GetNewNoticesCron {
     @Value("${app.frontend-url}")
     private String FRONTEND_URL;
 
+    private final static long TEN_MINUTES_IN_MILLISECONDS = 10 * 60 * 1000;
+    private final static long FIVE_SECONDS_IN_MILLISECONDS = 5*1000;
+
     public GetNewNoticesCron(
         NoticeRepository noticeRepository,
         SubscriptionRepository subscriptionRepository,
@@ -60,7 +63,7 @@ public class GetNewNoticesCron {
      * Ação agendada que realiza a procura por novos editais e notifica os usuários
      * caso tenha algum edital novo.
      */
-    @Scheduled(fixedDelay = 5000)
+    @Scheduled(fixedDelay = TEN_MINUTES_IN_MILLISECONDS, initialDelay = FIVE_SECONDS_IN_MILLISECONDS)
     public void getNewNoticesCron() {
         if(isCronActive) {
             ArrayList<Notice> newNotices = new ArrayList<>();
