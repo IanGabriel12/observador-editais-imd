@@ -8,11 +8,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.context.Context;
 
 import imd.br.com.borapagar.notice_tracker.entities.Notice;
 import imd.br.com.borapagar.notice_tracker.entities.Subscription;
+import imd.br.com.borapagar.notice_tracker.helpers.EmailTemplateHelper;
 import imd.br.com.borapagar.notice_tracker.helpers.IEmailHelper;
 import imd.br.com.borapagar.notice_tracker.helpers.MailRequest;
 import imd.br.com.borapagar.notice_tracker.repositories.NoticeRepository;
@@ -27,18 +26,12 @@ public class GetNewNoticesCron {
 
     private NoticeRepository noticeRepository;
     private SubscriptionRepository subscriptionRepository;
-    private TemplateEngine templateEngine;
+    private EmailTemplateHelper emailTemplateHelper;
     private IEmailHelper emailHelper;
     private static Logger logger = LoggerFactory.getLogger(GetNewNoticesCron.class);
 
     @Value("${app.activate-cron}")
     private Boolean isCronActive;
-
-    @Value("${app.unsubscribe-uri}")
-    private String UNSUBSCRIBE_URI;
-
-    @Value("${app.frontend-url}")
-    private String FRONTEND_URL;
 
     private final static long TEN_MINUTES_IN_MILLISECONDS = 10 * 60 * 1000;
     private final static long FIVE_SECONDS_IN_MILLISECONDS = 5*1000;
@@ -46,13 +39,13 @@ public class GetNewNoticesCron {
     public GetNewNoticesCron(
         NoticeRepository noticeRepository,
         SubscriptionRepository subscriptionRepository,
-        TemplateEngine templateEngine,
+        EmailTemplateHelper emailTemplateHelper,
         IEmailHelper emailHelper,
         IMDNoticeTrackerImpl imdNoticeTracker
     ) {
-        this.templateEngine = templateEngine;
         this.noticeRepository = noticeRepository;
         this.subscriptionRepository = subscriptionRepository;
+        this.emailTemplateHelper = emailTemplateHelper;
         this.emailHelper = emailHelper;
 
         this.noticeTrackers = new ArrayList<>();
@@ -92,30 +85,14 @@ public class GetNewNoticesCron {
         final String EMAIL_SUBJECT = String.format("%d novos editais abertos", newNotices.size());
         for(Subscription subscription : subscriptions) {
             String to = subscription.getEmail();
-            String content = generateEmailContent(newNotices, subscription.getRemoveToken());
+            String content = emailTemplateHelper.generateNoticesEmailContent(newNotices, subscription.getRemoveToken());
             MailRequest noticesEmail = MailRequest.builder().to(to).subject(EMAIL_SUBJECT).content(content).build();
             try {
                 emailHelper.sendEmail(noticesEmail);
-
             } catch (MessagingException e) {
                 logger.atError().log(e.getMessage());
             }
         }
     }
 
-    /**
-     * Gera o conteúdo do email personalizado contendo todos os editais novos e o token de 
-     * remoção daquele email.
-     * @param newNotices - Lista de editais novos.
-     * @param removeToken - Token de remoção.
-     * @return
-     */
-    private String generateEmailContent(List<Notice> newNotices, String removeToken) {
-        Context context = new Context();
-        String unsubscribeUrl = String.format("%s/%s?token=%s", FRONTEND_URL, UNSUBSCRIBE_URI, removeToken);
-        context.setVariable("notices", newNotices);
-        context.setVariable("unsubscribeUrl", unsubscribeUrl);
-        String processedText =  templateEngine.process("email-template", context);
-        return processedText;
-    }
 }

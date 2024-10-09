@@ -29,7 +29,7 @@ public class SubscriptionController {
      */
     @PostMapping
     public ResponseEntity<String> subscribeEmail(@RequestBody @Valid CreateSubscriptionBody subscriptionDTO) {
-        subscriptionService.insertNewSubscription(subscriptionDTO);
+        subscriptionService.subscribeEmail(subscriptionDTO);
         return ResponseEntity.ok().body("Email subscribed with success");
     }
 
