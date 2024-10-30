@@ -1,24 +1,5 @@
-FROM maven:3.9.9-eclipse-temurin-21
-
-ARG FRONTEND_URL
-ARG UNSUBSCRIBE_URI
-ARG MAIL_USERNAME
-ARG MAIL_PASSWORD
-ARG DB_USERNAME
-ARG DB_PASSWORD
-ARG DB_URL
-
-ENV FRONTEND_URL=$FRONTEND_URL
-ENV UNSUBSCRIBE_URI=$UNSUBSCRIBE_URI
-ENV MAIL_USERNAME=$MAIL_USERNAME
-ENV MAIL_PASSWORD=$MAIL_PASSWORD
-ENV DB_USERNAME=$DB_USERNAME
-ENV DB_PASSWORD=$DB_PASSWORD
-ENV DB_URL=$DB_URL
-
+FROM eclipse-temurin:21
 EXPOSE 8080
-
 WORKDIR /app
-COPY . .
-RUN mvn clean package
-ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=common,prod", "target/notice-tracker-0.0.1-SNAPSHOT.jar"]
+COPY target/notice-tracker-0.0.1-SNAPSHOT.jar app.jar
+ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=common,prod", "app.jar"]
