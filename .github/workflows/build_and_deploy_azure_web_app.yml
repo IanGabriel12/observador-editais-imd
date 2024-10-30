@@ -58,11 +58,13 @@ jobs:
         run: echo "REPO=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
 
       - name: Build with Maven
+        working-directory: ./backend
         run: mvn clean package -DskipTests
 
       - name: Build and push container image to registry
         uses: docker/build-push-action@0565240e2d4ab88bba5387d719585280857ece09 # v5.0.0
         with:
+          context: ./backend
           push: true
           tags: ghcr.io/${{ env.REPO }}:${{ github.sha }}
           file: ./backend/Dockerfile
