@@ -1,0 +1,169 @@
+body {
+  background-color: #fafafa;
+}
+
+.content {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding: 4rem 2rem;
+}
+
+h1 {
+  text-align: center;
+}
+
+p {
+  width: 90%;
+  text-align: center;
+  margin-top: 0.75rem;
+  font-size: 1.1rem;
+}
+
+form {
+  margin-top: 2rem;
+  display: flex;
+  gap: 1rem;
+  height: 45px;
+}
+
+button {
+  padding: 0 0.75rem; 
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  background-color: #2a5bc5;
+  border: 1px solid #1039be;
+  color: #f5fafa;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 100ms;
+  font-size: 0.9rem;
+}
+
+button:hover:not(:disabled) {
+  background-color: #2550ad;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+button img {
+  height: 20px;
+  width: 20px;
+}
+
+.email {
+  height: 45px;
+  display: flex;
+  overflow: hidden;
+  border-radius: 0.5rem;
+}
+
+.email-icon {
+  padding: 0 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #2a5bc5;
+}
+
+.email-icon img {
+  width: 25px;
+  height: 25px;
+}
+
+.email-input {
+  padding-left: 1rem;
+  font-size: 0.9rem;
+  border-top-right-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
+  border: 1px solid gray;
+  box-shadow: 1px 1px 10px #17181844;
+  width: 350px;
+}
+
+.loader {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  position: relative;
+  animation: rotate 1s linear infinite
+}
+.loader::before {
+  content: "";
+  box-sizing: border-box;
+  position: absolute;
+  inset: 0px;
+  border-radius: 50%;
+  border: 2px solid #aaaaaa;
+  animation: prixClipFix 2s linear infinite ;
+}
+
+@keyframes rotate {
+  100%   {transform: rotate(360deg)}
+}
+
+@keyframes prixClipFix {
+    0%   {clip-path:polygon(50% 50%,0 0,0 0,0 0,0 0,0 0)}
+    25%  {clip-path:polygon(50% 50%,0 0,100% 0,100% 0,100% 0,100% 0)}
+    50%  {clip-path:polygon(50% 50%,0 0,100% 0,100% 100%,100% 100%,100% 100%)}
+    75%  {clip-path:polygon(50% 50%,0 0,100% 0,100% 100%,0 100%,0 100%)}
+    100% {clip-path:polygon(50% 50%,0 0,100% 0,100% 100%,0 100%,0 0)}
+}
+
+
+.helper {
+  width: 500px;
+  font-size: 0.9rem;
+  text-align: center;
+  margin-top: 0.5rem;
+}
+
+.helper span {
+  margin-left: 0.5rem;
+}
+
+.helper .loading {
+  font-style: italic;
+  color: #666666;
+}
+
+.helper img {
+  width: 10px;
+  height: 10px;
+}
+
+.success {
+  color: #149c14;
+}
+
+.error {
+  color: #a12424;
+}
+
+@media screen and (max-width: 600px) {
+  form {
+    flex-direction: column;
+    height: unset;
+    width: 100%;
+  }
+
+  .email-input {
+    width: 100%;
+  }
+
+  .email {
+    width: 100%;
+    height: 45px;
+  }
+
+  button {
+    height: 45px;
+    justify-content: center;
+  }
+}
