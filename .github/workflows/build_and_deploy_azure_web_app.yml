@@ -24,13 +24,15 @@
 # For more information on the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # For more samples to get started with GitHub Action workflows to deploy to Azure: https://github.com/Azure/actions-workflow-samples
 
-name: Build and deploy a container to an Azure Web App
+name: Build and deploy the backend to azure
 
 env:
   AZURE_WEBAPP_NAME: noticetrackerapi  # set this to the name of your Azure Web App
 
 on:
   push:
+    paths:
+      - 'backend/**'
     branches: [ "main" ]
   workflow_dispatch:
 
@@ -56,6 +58,7 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ github.token }}
+          
       - name: Set up JDK 21
         uses: actions/setup-java@v3
         with:
