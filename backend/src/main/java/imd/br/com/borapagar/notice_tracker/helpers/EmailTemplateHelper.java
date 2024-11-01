@@ -16,9 +16,6 @@ public class EmailTemplateHelper {
     @Autowired
     private TemplateEngine templateEngine;
 
-    @Value("${app.unsubscribe-uri}")
-    private String UNSUBSCRIBE_URI;
-
     @Value("${app.frontend-url}")
     private String FRONTEND_URL;
 
@@ -53,10 +50,12 @@ public class EmailTemplateHelper {
 
     /**
      * Gera o link para desinscrever o usuário do sistema dado o seu token de remoção.
+     * É assumido que o frontend possui uma rota <code>unsubscribe</code> que recebe um token como
+     * query param.
      * @param removeToken - Token de remoção
      * @return Link para desiscrever o usuário gerado a partir do token
      */
     private String generateUnsubscribeUrlFromToken(String removeToken) {
-        return String.format("%s/%s?token=%s", FRONTEND_URL, UNSUBSCRIBE_URI, removeToken);
+        return String.format("%s/unsubscribe?token=%s", FRONTEND_URL, removeToken);
     }
 }
