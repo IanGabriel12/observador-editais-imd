@@ -11,13 +11,15 @@ body {
 
 h1 {
   text-align: center;
+  max-width: 600px;
 }
 
 p {
   width: 90%;
   text-align: center;
   margin-top: 0.75rem;
-  font-size: 1.1rem;
+  font-size: 1rem;
+  max-width: 500px;
 }
 
 form {
