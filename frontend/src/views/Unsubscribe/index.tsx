@@ -9,7 +9,6 @@ function Unsubscribe() {
     useEffect(handlePageLoad, []);
 
     function handlePageLoad() {
-        console.log('teste');
         const token = searchParams.get('token');
         if(!token) {
             setMessage('Não foi possível cancelar a inscrição');
