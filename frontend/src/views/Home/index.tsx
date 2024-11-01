@@ -8,7 +8,7 @@ import SubscriptionService from '../../SubscriptionService';
 
 const CONFLICT = 409;
 
-function selectHelperComponent(isLoading: boolean, isSuccess: boolean, isError: boolean, errorMessage: string) {
+function selectHelperComponent(isLoading: boolean, isSuccess: boolean, errorMessage: string) {
   const loadingComponent = (
     <div className='helper'>
       <div className="loader"></div>
@@ -42,7 +42,7 @@ function Home() {
   const [isLoading, setIsloading] = useState(false);
   const [isFirstTime, setIsFirstTime] = useState(true);
   const [isSuccess, setIsSuccess] = useState(false);
-  const [isError, setIsError] = useState(false);
+  const [_, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [email, setEmail] = useState('');
 
@@ -77,7 +77,7 @@ function Home() {
       })
   }
 
-  let helperMessageElement: React.JSX.Element = selectHelperComponent(isLoading, isSuccess, isError, errorMessage);
+  let helperMessageElement: React.JSX.Element = selectHelperComponent(isLoading, isSuccess, errorMessage);
   
   return (
     <div className='content'>

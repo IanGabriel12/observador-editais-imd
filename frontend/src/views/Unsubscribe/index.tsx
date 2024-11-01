@@ -3,7 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import SubscriptionService from "../../SubscriptionService";
 
 function Unsubscribe() {
-    const [searchParams, setSearchParams] = useSearchParams();
+    const [searchParams, _] = useSearchParams();
     const [message, setMessage] = useState('');
 
     useEffect(handlePageLoad, []);
