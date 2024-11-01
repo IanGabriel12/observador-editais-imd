@@ -7,8 +7,6 @@ export default class SubscriptionService {
         baseURL: import.meta.env.VITE_API_URL
     });
 
-    private SubscriptionService() {}
-
     public static getInstance() {
         if(!this.instance) {
             this.instance = new SubscriptionService();
@@ -22,5 +20,13 @@ export default class SubscriptionService {
         });
     }
 
-    
+    public unsubscribeEmail(removeToken: string) {
+        return this.api.delete('/subscription', {
+            data: {
+                removeToken
+            }
+        });
+    }
+
+
 }

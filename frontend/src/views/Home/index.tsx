@@ -1,13 +1,12 @@
-import { useState } from 'react'
-import './App.css'
-import EmailIcon from './assets/email.svg';
-import SubscribeIcon from './assets/subscribe.svg';
-import CheckIcon from './assets/check.svg';
-import ErrorIcon from './assets/error.svg';
-import SubscriptionService from './SubscriptionService';
+import { FormEvent, useState } from 'react'
+import './styles.css'
+import EmailIcon from '../../assets/email.svg';
+import SubscribeIcon from '../../assets/subscribe.svg';
+import CheckIcon from '../../assets/check.svg';
+import ErrorIcon from '../../assets/error.svg';
+import SubscriptionService from '../../SubscriptionService';
 
 const CONFLICT = 409;
-
 
 function selectHelperComponent(isLoading: boolean, isSuccess: boolean, isError: boolean, errorMessage: string) {
   const loadingComponent = (
@@ -39,7 +38,7 @@ function selectHelperComponent(isLoading: boolean, isSuccess: boolean, isError: 
   if(isSuccess) return successComponent;
   return errorComponent;
 }
-function App() {
+function Home() {
   const [isLoading, setIsloading] = useState(false);
   const [isFirstTime, setIsFirstTime] = useState(true);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -58,7 +57,8 @@ function App() {
     setIsError(false);
   }
 
-  function handleFormSubmit() {
+  function handleFormSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
     resetStates()
     subscribeEmail(email)
       .then(() => {
@@ -83,14 +83,14 @@ function App() {
     <div className='content'>
       <h1>Receba notificações de editais do Instituto Metrópole Digital</h1>
       <p>Informe o seu e-mail abaixo para receber notificações sobre novas oportunidades</p>
-      <form>
+      <form onSubmit={handleFormSubmit}>
         <div className='email'>
           <div className='email-icon'>
             <img src={EmailIcon} alt="" />
           </div>
           <input type="email" placeholder='Email' className='email-input' value={email} onChange={(e) => setEmail(e.currentTarget.value)}/>
         </div>
-        <button type='submit' disabled={isLoading} onClick={handleFormSubmit}>
+        <button type='submit' disabled={isLoading} >
           <img src={SubscribeIcon} alt="" />
           Inscrever-se
         </button>
@@ -102,4 +102,4 @@ function App() {
   )
 }
 
-export default App
+export default Home

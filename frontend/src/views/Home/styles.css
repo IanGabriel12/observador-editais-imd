@@ -1,7 +1,3 @@
-body {
-  background-color: #fafafa;
-}
-
 .content {
   display: flex;
   align-items: center;
@@ -9,12 +5,12 @@ body {
   padding: 4rem 2rem;
 }
 
-h1 {
+.content h1 {
   text-align: center;
   max-width: 600px;
 }
 
-p {
+.content p {
   width: 90%;
   text-align: center;
   margin-top: 0.75rem;
@@ -22,14 +18,14 @@ p {
   max-width: 500px;
 }
 
-form {
+.content form {
   margin-top: 2rem;
   display: flex;
   gap: 1rem;
   height: 45px;
 }
 
-button {
+.content button {
   padding: 0 0.75rem; 
   display: flex;
   justify-content: space-between;
@@ -44,16 +40,16 @@ button {
   font-size: 0.9rem;
 }
 
-button:hover:not(:disabled) {
+.content button:hover:not(:disabled) {
   background-color: #2550ad;
 }
 
-button:disabled {
+.content button:disabled {
   opacity: 0.5;
   cursor: default;
 }
 
-button img {
+.content button img {
   height: 20px;
   width: 20px;
 }
@@ -149,7 +145,7 @@ button img {
 }
 
 @media screen and (max-width: 600px) {
-  form {
+  .content form {
     flex-direction: column;
     height: unset;
     width: 100%;
@@ -164,7 +160,7 @@ button img {
     height: 45px;
   }
 
-  button {
+  .content button {
     height: 45px;
     justify-content: center;
   }
