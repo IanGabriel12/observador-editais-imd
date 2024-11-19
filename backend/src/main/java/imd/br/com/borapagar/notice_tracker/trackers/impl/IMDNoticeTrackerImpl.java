@@ -71,6 +71,7 @@ public class IMDNoticeTrackerImpl implements INoticeTracker {
                 String noticeTitle = noticeElement.select("span").first().text();
                 String noticeSubtitle = noticeElement.select("h5").first().text();
                 String noticeUrl = SOURCE_URL + noticeElement.attr("href");
+                String noticeDescription = this.getNoticeDescription(noticeUrl);
                 String[] noticeUrlParts = noticeUrl.split("/");
 
                 Long idAtSource = Long.parseLong(noticeUrlParts[noticeUrlParts.length - 1]);
@@ -79,6 +80,7 @@ public class IMDNoticeTrackerImpl implements INoticeTracker {
                     .url(noticeUrl)
                     .idAtSource(idAtSource)
                     .title(noticeTitle + " - " + noticeSubtitle)
+                    .description(noticeDescription)
                     .sourceName(SOURCE_NAME)
                     .build();
                 notices.add(notice);
@@ -90,5 +92,20 @@ public class IMDNoticeTrackerImpl implements INoticeTracker {
             throw new ApiException(ex.getMessage());
         }
         return notices;
+    }
+
+    /**
+     * Recupera a descrição de um edital
+     * @param noticeUrl - URL do edital
+     * @return Descrição do edital
+     */
+    private String getNoticeDescription(String noticeUrl) {
+        try {
+            Document noticeDetailPage = SSLHelper.getConnection(noticeUrl).get();
+            return noticeDetailPage.select("div.conteudo-noticia").first().text();
+        } catch(IOException ex) {
+            logger.atError().log("Error at fetching notice description from IMD website");
+            throw new ApiException(ex.getMessage());
+        }
     }
 }
