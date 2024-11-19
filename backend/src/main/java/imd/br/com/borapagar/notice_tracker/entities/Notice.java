@@ -26,6 +26,9 @@ public class Notice {
     @Column(nullable = false)
     private String title;
 
+    @Column(nullable = true, length = 1000)
+    private String description;
+
     @Column(nullable = false)
     private String sourceName;
 
