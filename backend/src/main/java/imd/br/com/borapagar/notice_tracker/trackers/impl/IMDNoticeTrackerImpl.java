@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import imd.br.com.borapagar.notice_tracker.entities.Notice;
 import imd.br.com.borapagar.notice_tracker.exception.ApiException;
 import imd.br.com.borapagar.notice_tracker.helpers.SSLHelper;
+import imd.br.com.borapagar.notice_tracker.helpers.StringHelper;
 import imd.br.com.borapagar.notice_tracker.repositories.NoticeRepository;
 import imd.br.com.borapagar.notice_tracker.trackers.INoticeTracker;
 
@@ -39,7 +40,9 @@ public class IMDNoticeTrackerImpl implements INoticeTracker {
     }
 
     /**
-     * Dado uma lista de editais, filtra apenas aqueles que não estão no banco de dados.
+     * Dado uma lista de editais, filtra apenas aqueles que não estão no banco de
+     * dados.
+     * 
      * @param notices - Lista original de editais
      * @return Lista contendo editais novos
      */
@@ -49,16 +52,18 @@ public class IMDNoticeTrackerImpl implements INoticeTracker {
 
     /**
      * Verifica se o edital já existe no banco de dados
+     * 
      * @param notice - Edital
      * @return Um booleano
      */
     private Boolean isNoticeAtDatabase(Notice notice) {
         return noticeRepository.findBySourceNameAndIdAtSource(SOURCE_NAME, notice.getIdAtSource()).isPresent();
-    } 
-    
+    }
 
     /**
-     * Recupera todos os editais presentes na seção "Em andamento" da página de editais do IMD.
+     * Recupera todos os editais presentes na seção "Em andamento" da página de
+     * editais do IMD.
+     * 
      * @return Lista de editais
      */
     private List<Notice> fetchAllNotices() {
@@ -67,25 +72,27 @@ public class IMDNoticeTrackerImpl implements INoticeTracker {
             String noticesUrl = String.format("%s/%s", SOURCE_URL, NOTICES_URI);
             Document noticeWebsite = SSLHelper.getConnection(noticesUrl).get();
             Elements noticesElements = noticeWebsite.select(".box-editais-andamentos .card .card-body a");
-            for(Element noticeElement : noticesElements) {
+            for (Element noticeElement : noticesElements) {
                 String noticeTitle = noticeElement.select("span").first().text();
                 String noticeSubtitle = noticeElement.select("h5").first().text();
                 String noticeUrl = SOURCE_URL + noticeElement.attr("href");
                 String noticeDescription = this.getNoticeDescription(noticeUrl);
+                String noticeDescriptionTruncatedEllipsis = StringHelper.truncateEllipsis(noticeDescription,
+                        Notice.MAX_LENGTH_DESCRIPTION_IN_CHARACTERES);
                 String[] noticeUrlParts = noticeUrl.split("/");
 
                 Long idAtSource = Long.parseLong(noticeUrlParts[noticeUrlParts.length - 1]);
                 Notice notice = Notice
-                    .builder()
-                    .url(noticeUrl)
-                    .idAtSource(idAtSource)
-                    .title(noticeTitle + " - " + noticeSubtitle)
-                    .description(noticeDescription)
-                    .sourceName(SOURCE_NAME)
-                    .build();
+                        .builder()
+                        .url(noticeUrl)
+                        .idAtSource(idAtSource)
+                        .title(noticeTitle + " - " + noticeSubtitle)
+                        .description(noticeDescriptionTruncatedEllipsis)
+                        .sourceName(SOURCE_NAME)
+                        .build();
                 notices.add(notice);
             }
-        } catch(IOException ex) {
+        } catch (IOException ex) {
             logger.atError().log("Error at fetching notices from IMD website");
             throw new ApiException(ex.getMessage());
         } catch (NumberFormatException ex) {
@@ -96,6 +103,7 @@ public class IMDNoticeTrackerImpl implements INoticeTracker {
 
     /**
      * Recupera a descrição de um edital
+     * 
      * @param noticeUrl - URL do edital
      * @return Descrição do edital
      */
@@ -103,7 +111,7 @@ public class IMDNoticeTrackerImpl implements INoticeTracker {
         try {
             Document noticeDetailPage = SSLHelper.getConnection(noticeUrl).get();
             return noticeDetailPage.select("div.conteudo-noticia").first().text();
-        } catch(IOException ex) {
+        } catch (IOException ex) {
             logger.atError().log("Error at fetching notice description from IMD website");
             throw new ApiException(ex.getMessage());
         }
