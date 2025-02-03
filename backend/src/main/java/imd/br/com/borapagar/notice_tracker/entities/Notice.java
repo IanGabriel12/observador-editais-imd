@@ -19,12 +19,17 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Notice {
+    public final static int MAX_LENGTH_DESCRIPTION_IN_CHARACTERES = 600;
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @Column(nullable = false)
     private String title;
+
+    @Column(nullable = true, length = MAX_LENGTH_DESCRIPTION_IN_CHARACTERES)
+    private String description;
 
     @Column(nullable = false)
     private String sourceName;

@@ -7,6 +7,7 @@
         <ul class="notice-list">
             <li th:each="notice : ${notices}">
                 <h5 th:utext="${notice.title}"></h5>
+                <p th:utext="${notice.description}"></p>
                 <a th:href="${notice.url}">Link do edital</a>
             </li>
         </ul>
